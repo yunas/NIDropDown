@@ -52,14 +52,20 @@
 }
 
 - (IBAction)selectClicked:(id)sender {
-    NSArray * arr = [[NSArray alloc] init];
-    arr = [NSArray arrayWithObjects:@"Hello 0", @"Hello 1", @"Hello 2", @"Hello 3", @"Hello 4", @"Hello 5", @"Hello 6", @"Hello 7", @"Hello 8", @"Hello 9",nil];
-    NSArray * arrImage = [[NSArray alloc] init];
-    arrImage = [NSArray arrayWithObjects:[UIImage imageNamed:@"apple.png"], [UIImage imageNamed:@"apple2.png"], [UIImage imageNamed:@"apple.png"], [UIImage imageNamed:@"apple2.png"], [UIImage imageNamed:@"apple.png"], [UIImage imageNamed:@"apple2.png"], [UIImage imageNamed:@"apple.png"], [UIImage imageNamed:@"apple2.png"], [UIImage imageNamed:@"apple.png"], [UIImage imageNamed:@"apple2.png"], nil];
+    
+    
+    NSArray *arr = @[@"Hello 0", @"Hello 1", @"Hello 2", @"Hello 3", @"Hello 4", @"Hello 5", @"Hello 6", @"Hello 7", @"Hello 8", @"Hello 9"];
+    UIImage *img1 = [UIImage imageNamed:@"apple.png"];
+    UIImage *img2 = [UIImage imageNamed:@"apple.png"];
+    
+    NSArray * arrImage = @[ img1, img2, img1, img2,img1, img2,img1, img2,img1, img2];
+
     if(dropDown == nil) {
+    
         CGFloat f = 200;
-        dropDown = [[NIDropDown alloc]showDropDown:sender :&f :arr :arrImage :@"down"];
+        dropDown = [[NIDropDown alloc]showDropDown:sender :&f :arr :arrImage :DropDownOpeningDirection_Down];
         dropDown.delegate = self;
+    
     }
     else {
         [dropDown hideDropDown:sender];

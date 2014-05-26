@@ -22,48 +22,71 @@
 @synthesize list;
 @synthesize imageList;
 @synthesize delegate;
-@synthesize animationDirection;
 
-- (id)showDropDown:(UIButton *)b:(CGFloat *)height:(NSArray *)arr:(NSArray *)imgArr:(NSString *)direction {
-    btnSender = b;
+
+-(void) initTableContainerWithWidth:(double)width{
+
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, 0)];
+    table.delegate = self;
+    table.dataSource = self;
+    table.layer.cornerRadius = 5;
+    table.backgroundColor = [UIColor colorWithRed:0.239 green:0.239 blue:0.239 alpha:1];
+    table.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    table.separatorColor = [UIColor grayColor];
+    
+}
+
+-(void) setViewLayout{
+
+    self.layer.masksToBounds = NO;
+    self.layer.cornerRadius = 8;
+    self.layer.shadowRadius = 5;
+    self.layer.shadowOpacity = 0.5;
+    
+}
+
+- (id)showDropDown:(UIButton *)btn
+        withHeight:(CGFloat *)height
+         withTexts:(NSArray *)arr
+      havingImages:(NSArray *)imgArr
+      andDirection:(DropDownOpeningDirection)direction {
+    
+    btnSender = btn;
     animationDirection = direction;
     self.table = (UITableView *)[super init];
     if (self) {
         // Initialization code
-        CGRect btn = b.frame;
         self.list = [NSArray arrayWithArray:arr];
         self.imageList = [NSArray arrayWithArray:imgArr];
-        if ([direction isEqualToString:@"up"]) {
-            self.frame = CGRectMake(btn.origin.x, btn.origin.y, btn.size.width, 0);
+        CGRect frame = btnSender.frame;
+
+        if (direction == DropDownOpeningDirection_Up) {
+            frame.size.height = 0;
             self.layer.shadowOffset = CGSizeMake(-5, -5);
-        }else if ([direction isEqualToString:@"down"]) {
-            self.frame = CGRectMake(btn.origin.x, btn.origin.y+btn.size.height, btn.size.width, 0);
+            
+        }else if (direction == DropDownOpeningDirection_Down) {
+            frame.origin.y = frame.origin.y + frame.size.height;
+            frame.size.height = 0;            
             self.layer.shadowOffset = CGSizeMake(-5, 5);
         }
+
+        [self setFrame:frame];
+    
+        [self initTableContainerWithWidth:frame.size.width];
         
-        self.layer.masksToBounds = NO;
-        self.layer.cornerRadius = 8;
-        self.layer.shadowRadius = 5;
-        self.layer.shadowOpacity = 0.5;
         
-        table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, btn.size.width, 0)];
-        table.delegate = self;
-        table.dataSource = self;
-        table.layer.cornerRadius = 5;
-        table.backgroundColor = [UIColor colorWithRed:0.239 green:0.239 blue:0.239 alpha:1];
-        table.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        table.separatorColor = [UIColor grayColor];
         
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:0.5];
-        if ([direction isEqualToString:@"up"]) {
-            self.frame = CGRectMake(btn.origin.x, btn.origin.y-*height, btn.size.width, *height);
-        } else if([direction isEqualToString:@"down"]) {
-            self.frame = CGRectMake(btn.origin.x, btn.origin.y+btn.size.height, btn.size.width, *height);
+        if (direction == DropDownOpeningDirection_Up) {
+            self.frame = CGRectMake(btnSender.frame.origin.x, btnSender.frame.origin.y-*height, btnSender.frame.size.width, *height);
+        } else if(DropDownOpeningDirection_Down) {
+            self.frame = CGRectMake(btnSender.frame.origin.x, btnSender.frame.origin.y+btn.frame.size.height, btnSender.frame.size.width, *height);
         }
-        table.frame = CGRectMake(0, 0, btn.size.width, *height);
+        
+        table.frame = CGRectMake(0, 0, btnSender.frame.size.width, *height);
         [UIView commitAnimations];
-        [b.superview addSubview:self];
+        [btnSender.superview addSubview:self];
         [self addSubview:table];
     }
     return self;
@@ -74,9 +97,9 @@
     
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.5];
-    if ([animationDirection isEqualToString:@"up"]) {
+    if (animationDirection == DropDownOpeningDirection_Up) {
         self.frame = CGRectMake(btn.origin.x, btn.origin.y, btn.size.width, 0);
-    }else if ([animationDirection isEqualToString:@"down"]) {
+    }else if (animationDirection == DropDownOpeningDirection_Down) {
         self.frame = CGRectMake(btn.origin.x, btn.origin.y+btn.size.height, btn.size.width, 0);
     }
     table.frame = CGRectMake(0, 0, btn.size.width, 0);
