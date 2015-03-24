@@ -63,7 +63,11 @@
     if(dropDown == nil) {
     
         CGFloat f = 200;
-        dropDown = [[NIDropDown alloc]showDropDown:sender :&f :arr :arrImage :DropDownOpeningDirection_Down];
+        
+        dropDown = [[NIDropDown alloc]showDropDown:sender withHeight:&f withTexts:arr havingImages:arrImage andDirection:DropDownOpeningDirection_Down];
+//        dropDown = [[NIDropDown alloc]init];
+        
+//        [dropDown showDropDown:sender :&f :arr :arrImage :DropDownOpeningDirection_Down];
         dropDown.delegate = self;
     
     }
